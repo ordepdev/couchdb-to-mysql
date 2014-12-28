@@ -40,7 +40,6 @@ Converter.prototype.connect = function () {
     var that = this;
     this.mysql.connect(function (err) {
         if (err) throw err;
-        console.log('connected to mysql');
         that.listen();
     });
 };
@@ -56,10 +55,8 @@ Converter.prototype.listen = function () {
 Converter.prototype.handle = function (change) {
     if (change.deleted) {
         // TODO : remove
-        console.log('deleted: ' + change.id);
     } else if (change.changes[0].rev[0] != '1') {
         // TODO : change
-        console.log('changed: ' + change.id);
     } else {
         this.sync(change, 'created');
     } 
@@ -68,7 +65,6 @@ Converter.prototype.handle = function (change) {
 Converter.prototype.sync = function (change, status) {
     var that = this;
     this.database.get(change.id, function (err, res) {
-        console.log(status + ': ' + res.title);
         if (status === 'created') {
             that.createDoc({ id : res._id, title : res.title });            
         }
@@ -83,4 +79,4 @@ Converter.prototype.createDoc = function (doc) {
     });
 };
 
-var converter = new Converter().connect();
+module.exports = Converter;
