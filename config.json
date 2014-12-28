@@ -16,6 +16,6 @@
     "queries" : {
         "insert" : "insert into post set ?",
         "update" : "",
-        "delete" : ""
+        "delete" : "delete from post where id = ?"
     }
 }
