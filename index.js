@@ -10,7 +10,8 @@ var CONFIG = {
     mySQLPort : '',
     mySQLUser : 'root',
     mySQLPassword : 'password',
-    mySQLDatabase : 'offline'
+    mySQLDatabase : 'offline',
+    mySQLTable : 'post'
 }
 
 function Converter (config) {
@@ -72,7 +73,7 @@ Converter.prototype.sync = function (change, status) {
 };
 
 Converter.prototype.createDoc = function (doc) {
-    var query = 'insert into post set ?';
+    var query = 'insert into ' + this.config.mySQLTable + ' set ?';
     this.mysql.query(query, doc,  function (err, res) {
         if (err) throw err;
         console.log(res);
