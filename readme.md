@@ -9,7 +9,7 @@ well, i presented CouchDB to a person and the first question was... "can you syn
 Whith this tool... Yes.
 
 ##### how?
-converter listen for CouchDB changes and magicaly reflects them on MySQL.
+converter listen for CouchDB changes and magically reflects them on MySQL.
 
 ##### status
 WORK IN PROGRESS.
