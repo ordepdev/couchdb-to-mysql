@@ -1,20 +1,9 @@
 var follow = require('follow');
 var nano = require('nano');
 var mysql = require('mysql');
+var CONFIG = require('./config.json');
 
-var CONFIG = {
-    couchHost : '127.0.0.1',
-    couchPort : '5984',
-    couchDatabase : 'offline',
-    mySQLHost : '127.0.0.1',
-    mySQLPort : '',
-    mySQLUser : 'root',
-    mySQLPassword : 'password',
-    mySQLDatabase : 'offline',
-    mySQLTable : 'post'
-}
-
-function Converter (config) {
+function Converter (config, queries) {
     this.config = config || CONFIG;
     this.couch = this.parseCouchDB();
     this.mysql = this.parseMySQL();
@@ -23,17 +12,17 @@ function Converter (config) {
 
 Converter.prototype.parseCouchDB = function () {
     return 'http://' 
-        + this.config.couchHost + ':' 
-        + this.config.couchPort + '/' 
-        + this.config.couchDatabase;
+        + this.config.couch.host + ':' 
+        + this.config.couch.port + '/' 
+        + this.config.couch.database;
 };
 
 Converter.prototype.parseMySQL = function () {
     return mysql.createConnection({
-        host : this.config.mySQLHost,
-        user : this.config.mySQLUser,
-        password : this.config.mySQLPassword,
-        database : this.config.mySQLDatabase
+        host : this.config.mySQL.host,
+        user : this.config.mySQL.user,
+        password : this.config.mySQL.password,
+        database : this.config.mySQL.database
     });
 };
 
@@ -55,9 +44,9 @@ Converter.prototype.listen = function () {
 
 Converter.prototype.handle = function (change) {
     if (change.deleted) {
-        // TODO : remove
+        // TODO : delete
     } else if (change.changes[0].rev[0] != '1') {
-        // TODO : change
+        // TODO : update
     } else {
         this.sync(change, 'created');
     } 
@@ -67,17 +56,23 @@ Converter.prototype.sync = function (change, status) {
     var that = this;
     this.database.get(change.id, function (err, res) {
         if (status === 'created') {
-            that.createDoc({ id : res._id, title : res.title });            
+            that.insertDoc({ id : res._id, title : res.title });            
         }
     });
 };
 
-Converter.prototype.createDoc = function (doc) {
-    var query = 'insert into ' + this.config.mySQLTable + ' set ?';
-    this.mysql.query(query, doc,  function (err, res) {
+Converter.prototype.insertDoc = function (doc) {
+    this.mysql.query(this.config.queries.insert, doc,  function (err, res) {
         if (err) throw err;
-        console.log(res);
     });
+};
+
+Converter.prototype.updateDoc = function (doc) {
+    // TODO : update
+};
+
+Converter.prototype.deleteDoc = function (doc) {
+    // TODO : delete
 };
 
 module.exports = Converter;

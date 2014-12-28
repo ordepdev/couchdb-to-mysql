@@ -1,0 +1,21 @@
+{
+    "couch" : {
+        "host" : "127.0.0.1",
+        "port" : "5984",
+        "database" : "offline"
+    },
+
+    "mySQL" : {
+        "host" : "127.0.0.1",
+        "port" : "",
+        "user" : "root",
+        "password" : "password",
+        "database" : "offline"
+    },
+
+    "queries" : {
+        "insert" : "insert into post set ?",
+        "update" : "",
+        "delete" : ""
+    }
+}
