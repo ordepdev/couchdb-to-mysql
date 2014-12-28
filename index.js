@@ -44,7 +44,6 @@ Converter.prototype.listen = function () {
 
 Converter.prototype.handle = function (change) {
     if (change.deleted) {
-        console.log(change.id + ' deleted');
         this.sync(change, 'deleted');
     } else if (change.changes[0].rev[0] != '1') {
         this.sync(change, 'updated');
@@ -60,7 +59,6 @@ Converter.prototype.sync = function (change, status) {
             that.insertDoc({ id : res._id, title : res.title });            
         });
     } else if (status === 'deleted') {
-        console.log(change);
         that.deleteDoc({ id : change.id });
     } else {
         this.database.get(change.id, function (err, res) {
@@ -82,7 +80,6 @@ Converter.prototype.updateDoc = function (doc) {
 Converter.prototype.deleteDoc = function (doc) {
     this.mysql.query(this.config.queries.delete, doc.id, function (err, res) {
         if (err) throw err;
-        console.log(res);
     });
 };
 
