@@ -1,11 +1,22 @@
 {
-  "name": "couch-offline",
-  "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "couchdb-to-mysql",
+  "version": "0.0.1",
+  "description": "sync between couchdb and mysql",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ordepdev/converter.git"
   },
-  "author": "",
-  "license": "ISC"
+  "main": "index.js",
+  "keywords": [
+    "sync",
+    "couchdb",
+    "mysql"
+  ],
+  "author": "ordepdev",
+  "license": "MIT",
+  "dependencies": {
+    "follow": "^0.11.4",
+    "nano": "^6.0.2",
+    "mysql": "^2.5.4"
+  }
 }
