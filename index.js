@@ -6,6 +6,7 @@ var EventEmitter = require('events').EventEmitter;
 var CONFIG = require('./config.json');
 
 function Converter (config) {
+    if (!(this instanceof Converter)) return new Converter(config);
     this.config = config || CONFIG;
     this.couch = this.parseCouchDB();
     this.mysql = this.parseMySQL();
@@ -31,18 +32,18 @@ Converter.prototype.parseMySQL = function () {
 };
 
 Converter.prototype.connect = function () {
-    var that = this;
+    var self = this;
     this.mysql.connect(function (err) {
         if (err) throw err;
-        that.listen();
+        self.listen();
     });
 };
 
 Converter.prototype.listen = function () {
-    var that = this;
+    var self = this;
     follow(this.couch, function (err, change) {
         if (err) throw err;
-        that.handle(change);
+        self.handle(change);
     });
 };
 
