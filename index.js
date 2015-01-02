@@ -1,14 +1,18 @@
 var follow = require('follow');
 var nano = require('nano');
 var mysql = require('mysql');
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
 var CONFIG = require('./config.json');
 
-function Converter (config, queries) {
+function Converter (config) {
     this.config = config || CONFIG;
     this.couch = this.parseCouchDB();
     this.mysql = this.parseMySQL();
     this.database = require('nano')(this.couch);
 }
+
+util.inherits(Converter, EventEmitter);
 
 Converter.prototype.parseCouchDB = function () {
     return 'http://' 
@@ -53,34 +57,7 @@ Converter.prototype.handle = function (change) {
 };
 
 Converter.prototype.sync = function (change, status) {
-    var that = this;
-    if (status === 'created') {
-        this.database.get(change.id, function (err, res) {
-            that.insertDoc({ id : res._id, title : res.title });            
-        });
-    } else if (status === 'deleted') {
-        that.deleteDoc({ id : change.id });
-    } else {
-        this.database.get(change.id, function (err, res) {
-            that.updateDoc({ id : res._id, title : res.title });
-        });
-    }
-};
-
-Converter.prototype.insertDoc = function (doc) {
-    this.mysql.query(this.config.queries.insert, doc,  function (err, res) {
-        if (err) throw err;
-    });
-};
-
-Converter.prototype.updateDoc = function (doc) {
-    // TODO : update
-};
-
-Converter.prototype.deleteDoc = function (doc) {
-    this.mysql.query(this.config.queries.delete, doc.id, function (err, res) {
-        if (err) throw err;
-    });
+    this.emit(status, change);
 };
 
 module.exports = Converter;
