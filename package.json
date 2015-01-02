@@ -1,6 +1,6 @@
 {
   "name": "couchdb-to-mysql",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "sync between couchdb and mysql",
   "repository": {
     "type": "git",
