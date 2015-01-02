@@ -1,8 +1,9 @@
-var converter = require('./')();
+var converter = require('./');
+var cvr = converter();
 
-converter.connect();
+cvr.connect();
 
-converter.on('created', function (change) {
+cvr.on('created', function (change) {
     var self = this;
     var query = this.config.queries.insert;
     this.database.get(change.id, function (err, res) {
@@ -14,7 +15,7 @@ converter.on('created', function (change) {
     });
 });
 
-converter.on('deleted', function (change) {
+cvr.on('deleted', function (change) {
     var query = this.config.queries.delete;
     this.mysql.query(query, change.id); 
 });
