@@ -14,7 +14,7 @@ converter listen for CouchDB changes and reflects them on MySQL.
 ##### example
 
 ```js
-var converter = require('converter');
+var converter = require('couchdb-to-mysql');
 var cvr = converter();
 cvr.connect();
 cvr.on('created', function (change) {
@@ -25,7 +25,7 @@ cvr.on('created', function (change) {
 ##### methods
 
 ```js
-var converter = require('converter')
+var converter = require('couchdb-to-mysql')
 ```
 
 ###### var cvr = converter(config={})
